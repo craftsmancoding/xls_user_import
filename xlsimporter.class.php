@@ -28,6 +28,11 @@ class XLS_Importer_Controller {
  
     }
 
+    /*
+    * get_template_content method - get the defautl.tpl 
+    * 
+    */
+
     public function get_template_content() {
 
     	$file = $this->config['tpl_path'] . $this->config['tpl'];
