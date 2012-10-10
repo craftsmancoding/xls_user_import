@@ -8,7 +8,7 @@
 
 
 <div class="well">
-	<form enctype="multipart/form-data" method="POST" action="upload.php">
+	<form enctype="multipart/form-data" method="POST" action="">
 		  <legend>Upload XLS file</legend>
 		  	<p>
 			  <small>The file must be version 97-2003 for it to work properly.</small>

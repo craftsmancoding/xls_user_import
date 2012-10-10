@@ -1,0 +1,1 @@
+<p>This is just an example of some other page.</p>
