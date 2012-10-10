@@ -33,6 +33,7 @@ class XLS_Importer_Controller {
 	 *
 	 */
 	public function __call($name , $args) {
+		global $modx;
 		$data = array();
 		$data['msg'] = $modx->lexicon('404_not_found');
 		return load_view('404.php',$data);

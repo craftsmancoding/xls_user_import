@@ -1,1 +1,1 @@
-<p><?php print $msg; ?></p>
+<p><?php print $data['msg']; ?></p>
