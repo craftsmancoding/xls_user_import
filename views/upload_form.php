@@ -3,14 +3,14 @@
 
 
 <div class="well">
-	<form enctype="multipart/form-data" method="POST" action="">
+	<form enctype="multipart/form-data" method="POST" action="<?php print $data['cmp_url']; ?>&p=process_upload">
 		  <legend><?php print $data['upload']; ?></legend>
 		  	<p>
 			  <small><?php print $data['format']; ?></small>
 			</p><br>
 			
 			<input type="hidden" name="MAX_FILE_SIZE" value="100000" />
-			<input type="file" id="file">
+			<input type="file" id="file" name="uploaded_file">
 
       		<div class="dummyfile">
 		      <input id="filename" type="text" class="input disabled" name="filename" readonly>
@@ -20,7 +20,5 @@
 
 		</form>
 </div>
-
-	<a href="<?php print $data['cmp_url']; ?>&p=other_page">Other Page</a>
 
 </div>

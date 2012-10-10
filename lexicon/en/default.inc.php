@@ -9,4 +9,8 @@
 	$_lang['xls_upload'] = 'Upload XLS file';
 	$_lang['choose'] = 'Choose';
 
+	$_lang['upload_msg_success'] = 'The file has been succesfully uploaded';
+	$_lang['upload_msg_error'] = 'There was an error uploading the file, please try again!';
+
+
 /*EOF*/
