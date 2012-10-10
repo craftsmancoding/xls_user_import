@@ -12,17 +12,8 @@ class XLS_Importer_Controller {
 	/**
 	 *
 	 */
-    public function __construct($modx,array $config = array()) {
-        $this->modx = $modx;
+    public function __construct() {
 
-       $core_path = MODX_CORE_PATH . 'components/xls_user_import/';
-        $this->config = array_merge(array(
-
-            'core_path' => $core_path,
-            'tpl_path' => $core_path .'templates/',
-            'tpl' => 'default.tpl'
-        ),$config);
- 
     }
 
 	/** 
