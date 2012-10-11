@@ -91,22 +91,67 @@ class XLS_Importer_Controller {
     	return $all_fields;
 	}
 
+	/**
+	 * $_POST contains keys for all MODX user fields.  The values in each spot of the array
+	 * are number(s) (comma-separated), corresponding to the source column.  E.g. 
+	 * if the fullname is meant to be constructed from the first and second columns in the 
+	 * uploaded XLS file, then $_POST['fullname'] = '1,2';
+	 *
+	 *
+	 */
 	public function map_fields() {
 		$file_path = $_POST['filepath'];
 		$xls_fields = $this->read_file($file_path);
+		$header_row = $xls_fields[1];
 		unset($xls_fields[1]);
-
+//print_r($_POST); exit;
+//print_r($xls_fields);
 		$mapping['fullname'] = explode(',',$_POST['fullname']);
 		$mapping['age'] = explode(',',$_POST['age']);
+		
+		$modUser_columns = array('username','class_key','active','hash_class','primary_group');
 
 		foreach ($xls_fields as $field) {
+		
+			$modUser_data = array(); // for stuff that goes to the modx_users table
+			$modUserProfile_data = array(); // for stuff that goes to the modx_user_attributes table
+		
 			foreach ($mapping as $key => $value) {
 				foreach ($value as $c) {
-					
-					$$key = isset($field[$c]) ? $field[$c] : '';
+					// Special treatement for extended: we must store the key=>value (not just the value)
+					if ($key == 'extended') {
+						$header = $header_row[$c];
+						if (isset($modUserProfile_data['extended'][$header])) {
+							$modUserProfile_data['extended'][$header] .= ' '. isset($field[$c]) ? $field[$c] : '';
+						}
+						else {
+							$modUserProfile_data['extended'][$header] = isset($field[$c]) ? $field[$c] : '';
+						}
+					}
+					elseif(in_array($key, $modUser_columns)) {
+						if (isset($modUser_data[$key])) {
+							$modUser_data[$key] .= ' '. isset($field[$c]) ? $field[$c] : '';
+						}
+						else {
+							$modUser_data[$key] = isset($field[$c]) ? $field[$c] : '';
+						}
+					}
+					else {
+						if (isset($modUserProfile_data[$key])) {
+							$modUserProfile_data[$key] .= ' '. isset($field[$c]) ? $field[$c] : '';
+						}
+						else {
+							$modUserProfile_data[$key] = isset($field[$c]) ? $field[$c] : '';
+						}
+					}
+					// Avoid using $$variable notation: it's difficult to follow!
+					//$$key = isset($field[$c]) ? $field[$c] : '';
 				}
 			}
-			echo '==' . $fullname . '<br>';
+//			echo '==' . $fullname . '<br>';
+			print_r($modUserProfile_data);
+			print_r($modUserProfile_data);
+			print '<hr/>';
  	
 		}
 
