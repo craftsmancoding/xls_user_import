@@ -106,7 +106,7 @@ class XLS_Importer_Controller {
 					$$key = isset($field[$c]) ? $field[$c] : '';
 				}
 			}
-			echo '==' . $age . '<br>';
+			echo '==' . $fullname . '<br>';
  	
 		}
 
