@@ -96,22 +96,22 @@ class XLS_Importer_Controller {
 		$xls_fields = $this->read_file($file_path);
 		unset($xls_fields[1]);
 
-		$fname = explode(',',$_POST['firstname']);
-		echo '<pre>';
-		print_r($fname);
-		die();
+		$mapping['fullname'] = explode(',',$_POST['fullname']);
+		$mapping['age'] = explode(',',$_POST['age']);
 
-
-		foreach ($xls_fields as $val) {
-			$firstname = isset($val[1]) ? $val[1] : '';
-          	$lastname = isset($val[2]) ? $val[2] : '';
-          	echo $firstname . ' ' .$lastname . '<br>';
+		foreach ($xls_fields as $field) {
+			foreach ($mapping as $key => $value) {
+				foreach ($value as $c) {
+					
+					$$key = isset($field[$c]) ? $field[$c] : '';
+				}
+			}
+			echo '==' . $age . '<br>';
+ 	
 		}
-		die();
 
-/*		echo '<pre>';
-		print_r($xls_fields);
-		die();*/
+		die();  
+
 	}
 
 }

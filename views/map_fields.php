@@ -24,13 +24,8 @@
 		<tbody>
 			<tr>
 
-				<td id="fname_map"></td>
+				<td id="full_map"></td>
 				
-			</tr>
-			<tr>
-				<td id="lname_map"></td>
-				
-
 			</tr>
 			<tr>
 				<td id="age_map"></td>
@@ -41,8 +36,7 @@
 	
 	<form method="post" action="<?php print $data['cmp_url']; ?>&p=map_fields">
 		<input type="text" id="filepath" name="filepath" value="<?php echo $data['file_path']; ?>">
-		<input type="text" id="firstname" name="firstname" value="">
-		<input type="text" id="lastname" name="lastname" value="">
+		<input type="text" id="fullname" name="fullname" value="">
 		<input type="text" id="age" name="age" value="">
 		<input type="submit" id="submit" value="Submit">
 	</form>
@@ -56,8 +50,7 @@
 <script type="text/javascript">
 	jQuery(document).ready(function(){
   		$('#submit').on('click', function() {
-  			setValue('fname_map','firstname');
-  			setValue('lname_map','lastname');
+  			setValue('full_map','fullname');
   			setValue('age_map','age');  			
   		});
 
