@@ -67,23 +67,52 @@ class XLS_Importer_Controller {
 		} else{
 		    $data['upload_msg'] = $modx->lexicon('upload_msg_error');
 		}
+		$data['file_path'] = $file_path;
 
-		$data['header_fields'] = $this->read_file($file_path);
+		// Get the fields on the xls fiel header row
+		$header_fields = array_slice( $this->read_file($file_path) , 0, 1);
+    	$header_fields = $header_fields[0];
+		$data['header_fields'] = $header_fields;
 
-		return load_view('process_upload.php',$data);
+		return load_view('map_fields.php',$data);
 	}
 
-
+	/** 
+	 * read_file method gets the content of the xls file
+	 *
+	 * @param string $file
+	 * @return array $all_fields
+	 *
+	 */
 	public function read_file($file) {
 		$excel = new Spreadsheet_Excel_Reader();
     	$excel->read($file);   
     	$all_fields = $excel->sheets[0]['cells'];
-    	$header_fields = array_slice($all_fields, 0, 1);
-    	$header_fields = $header_fields[0];
-    	return $header_fields;
-    
+    	return $all_fields;
 	}
 
+	public function map_fields() {
+		$file_path = $_POST['filepath'];
+		$xls_fields = $this->read_file($file_path);
+		unset($xls_fields[1]);
+
+		$fname = explode(',',$_POST['firstname']);
+		echo '<pre>';
+		print_r($fname);
+		die();
+
+
+		foreach ($xls_fields as $val) {
+			$firstname = isset($val[1]) ? $val[1] : '';
+          	$lastname = isset($val[2]) ? $val[2] : '';
+          	echo $firstname . ' ' .$lastname . '<br>';
+		}
+		die();
+
+/*		echo '<pre>';
+		print_r($xls_fields);
+		die();*/
+	}
 
 }
 
