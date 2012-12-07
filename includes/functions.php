@@ -44,4 +44,16 @@ function load_view($file, $data=array()) {
 
 }
 
+/**
+ * Auto Field Detection
+ * @param string $str
+ * @param string $find
+ * @return selected attr
+ */
+function auto_detect_field($str='', $find='') {
+	$pos = strpos(strtolower($str), $find);
+	// Note our use of ===.  Simply == would not work as expected
+	return $pos === false ? '' : "selected='selected'";
+}
+
 /*EOF*/

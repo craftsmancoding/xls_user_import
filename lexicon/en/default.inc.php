@@ -9,7 +9,7 @@
 	$_lang['xls_upload'] = 'Upload XLS file';
 	$_lang['choose'] = 'Choose';
 
-	$_lang['upload_msg_success'] = 'The file has been succesfully uploaded';
+	$_lang['upload_msg_success'] = 'The file has been succesfully uploaded. For each field in the XLS file, choose a target MODX user field. You do not need to map every field, and you can fine-tune your choices on the next page. For help, please see the <a target="_blank" href="https://github.com/craftsmancoding/xls_user_import/wiki/Mapping-Fields">wiki</a>.';
 	$_lang['upload_msg_error'] = 'There was an error uploading the file, please try again!';
 
 

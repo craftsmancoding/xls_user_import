@@ -1,66 +1,43 @@
 <div id="modx-panel-workspace" class="x-plain container">
 	<h2><?php print $data['title']; ?></h2>
 
+
 <div class="well">
-
-	<p><small><?php print $data['upload_msg']; ?></small></p><br>
-	<div id="drag">
-	<table class="fields">
-		<colgroup>
-			<col width="100"/>
-		</colgroup>
-		<tbody>
-			<?php foreach ($data['header_fields'] as $key => $value) : ?>
-			<tr><td><div class="drag" data-fieldkey="<?php echo $key; ?>"><?php echo $value; ?></div></td></tr>
-			<?php endforeach; ?>
-			
-		</tbody>
-	</table>
+	<div class="alert alert-success"><?php print $data['upload_msg']; ?></div>
 	
-	<table class="map">
-		<colgroup>
-			<col width="100"/>
-		</colgroup>
-		<tbody>
-			<tr>
+	<form class="form-horizontal" method="post" action="<?php print $data['cmp_url']; ?>&p=preview_map">
 
-				<td id="full_map"></td>
-				
-			</tr>
-			<tr>
-				<td id="age_map"></td>
-				
-			</tr>
-		</tbody>
-	</table>
-	
-	<form method="post" action="<?php print $data['cmp_url']; ?>&p=map_fields">
-		<input type="text" id="filepath" name="filepath" value="<?php echo $data['file_path']; ?>">
-		<input type="text" id="fullname" name="fullname" value="">
-		<input type="text" id="age" name="age" value="">
-		<input type="submit" id="submit" value="Submit">
+		 <legend><span class="xls_fields_head">XLS Fields</span><span class="xls_fields_head">Modx Fields</span></legend>
+
+
+
+		<?php 
+			// initialize $x_fld_count to 0
+			$x_fld_count = 0;
+			foreach ($data['xls_fields'] as $xfield) : 
+			// increament $x_fld_count first loop set to 1
+			// $x_fld_count determines the column number of the field from xls file
+			// it will be used on reading data on xls class
+			$x_fld_count++;
+		?>
+				 <div class="control-group">
+				    <label class="control-label" for="xls_field_<?php echo $x_fld_count; ?>"><?php echo ucfirst($xfield); ?></label>
+				    <div class="controls">
+				     <select id="xls_field_<?php echo $x_fld_count; ?>" name="xls_fields[<?php echo $xfield; ?>][<?php echo $x_fld_count;  ?>]">
+						    <option value=""></option>
+						    <?php foreach ($data['modx_fields'] as $mfield) : ?>
+						    	<option value="<?php echo $mfield; ?>" <?php echo auto_detect_field($xfield, $mfield); ?>><?php echo $mfield;  ?></option>
+						  	<?php endforeach; ?>
+						</select>
+				    </div>
+
+				  </div>
+		<?php endforeach; ?>
+
+	 	<input type="hidden"  name="file_path" value="<?php echo $data['file_path'] ?>">
+
+		<input type="submit" id="submit" class="btn btn-custom" value="Preview Mapping">
 	</form>
-
 </div>
 
 </div>
-
-</div>
-
-<script type="text/javascript">
-	jQuery(document).ready(function(){
-  		$('#submit').on('click', function() {
-  			setValue('full_map','fullname');
-  			setValue('age_map','age');  			
-  		});
-
-  		function setValue(map, fieldname) {
-  			 var childElems = $('td#' + map ).children();
-  			 var field = [];
-  			 $.each(childElems, function() {
-  			 	field.push($(this).data('fieldkey'));
-			 });
-			 $('#' + fieldname).val(field);
-  		}
-	});
-</script>
