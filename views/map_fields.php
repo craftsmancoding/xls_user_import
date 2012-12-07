@@ -12,29 +12,22 @@
 
 
 		<?php 
-			// initialize $x_fld_count to 0
-			$x_fld_count = 0;
-			foreach ($data['xls_fields'] as $xfield) : 
-			// increament $x_fld_count first loop set to 1
-			// $x_fld_count determines the column number of the field from xls file
-			// it will be used on reading data on xls class
-			$x_fld_count++;
+		// Used to generate unique CSS ids
+		$i = 0;
+		foreach ($data['xls_fields'] as $xls_field) :
 		?>
-				 <div class="control-group">
-				    <label class="control-label" for="xls_field_<?php echo $x_fld_count; ?>"><?php echo ucfirst($xfield); ?></label>
-				    <div class="controls">
-				     <select id="xls_field_<?php echo $x_fld_count; ?>" name="xls_fields[<?php echo $xfield; ?>][<?php echo $x_fld_count;  ?>]">
-						    <option value=""></option>
-						    <?php foreach ($data['modx_fields'] as $mfield) : ?>
-						    	<option value="<?php echo $mfield; ?>" <?php echo auto_detect_field($xfield, $mfield); ?>><?php echo $mfield;  ?></option>
-						  	<?php endforeach; ?>
-						</select>
-				    </div>
-
-				  </div>
-		<?php endforeach; ?>
-
-	 	<input type="hidden"  name="file_path" value="<?php echo $data['file_path'] ?>">
+			<div class="control-group">
+				<label class="control-label" for="xls_field_<?php print $i; ?>"><?php print ucfirst($xls_field); ?></label>
+				<div class="controls">
+					<select id="xls_field_<?php print $i; ?>" name="xls_fields[<?php print $xls_field; ?>]">
+						<?php print $data['options'][$xls_field]; ?>
+					</select>
+				</div>
+			</div>
+		<?php 
+			$i++;
+		endforeach; 
+		?>
 
 		<input type="submit" id="submit" class="btn btn-custom" value="Preview Mapping">
 	</form>

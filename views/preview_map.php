@@ -41,60 +41,72 @@
 	<form class="form-horizontal" method="post" action="<?php print $data['cmp_url']; ?>&p=preview_import">
 		<ul class="modx-fields">
 
-			<?php foreach ($data['mapped_fields'] as $modx_field => $xls_fields) : ?>
+
+			<?php 
+				foreach ($data['mapped_fields'] as $modx_field => $xls_fields) : 
+				$count_xfields = count($xls_fields);
+			?>
+			<?php if($modx_field != "") : ?>
 				<li class="<?php  echo $modx_field . 'List'; ?> well">
 
 					<h2><?php  echo $modx_field; ?></h2>
 
 						<table class="sortable <?php  echo $modx_field . '-tbl'; ?>">
 
-							<?php $xfields = explode(',', $xls_fields) ;?>	
-							<?php foreach ($xfields as $xfield) : ?>
-								<?php $xfield_val = explode('|', substr($xfield, 1, -1)); ?>
-					        	<tr id="<?php echo isset($xfield_val[0]) ? $xfield_val[0] :''; ?>">
+							<?php foreach ($xls_fields as $xfield) : ?>
+									
+					        	<tr>
 					        		<td class="alert alert-info">
-					        			<?php echo isset($xfield_val[1]) ? $xfield_val[1] :''; ?>
-					        			<input name="<?php  echo $modx_field .'[]'; ?>" type="hidden" value="<?php echo isset($xfield_val[0]) ? $xfield_val[0] :''; ?>">
+					        			<?php echo $xfield; ?>
+					        			<input name="<?php  echo $modx_field .'[]'; ?>" type="hidden" value="<?php echo $xfield; ?>">
 					        		</td>
 					        	</tr>
 					       	<?php endforeach; ?>
 
-					       	<?php 
-						       	if($modx_field != 'extended') :
-						       		if($xls_fields != "" &&  count($xfields) >= 3) : 
-					       	?>
-					       		<div class="add-separators">
-					       			<span style="font-weight:normal;color: #92999A;">Add Separators: </span>
-					       			<a href="#" data-separator="SPACE" class="separator"><span class="label label-warning">Space</span></a>
-					       		    <a href="#" data-separator="COMMA" class="separator"><span class="label label-warning">Comma</span></a>
-					       		    <a href="#" data-separator="DASH" class="separator"><span class="label label-warning">Dash</span></a>
-					       		    <a href="#" data-separator="COLON" class="separator"><span class="label label-warning">Colon</span></a>
-					       		</div>
-					       	<?php 
-						       		endif; 
-						       	endif; 
-					       	?>
+					      	<?php if($count_xfields >= 2 ) : ?>
+					      		<?php 	if($modx_field != 'extended') : ?>
+						       		<div class="add-separators">
+						       			<span style="font-weight:normal;color: #92999A;">Add Separators: </span>
+						       			<a href="#" data-separator="SPACE" class="separator"><span class="label label-warning">Space</span></a>
+						       		    <a href="#" data-separator="COMMA" class="separator"><span class="label label-warning">Comma</span></a>
+						       		    <a href="#" data-separator="DASH" class="separator"><span class="label label-warning">Dash</span></a>
+						       		    <a href="#" data-separator="COLON" class="separator"><span class="label label-warning">Colon</span></a>
+						       		</div>
+					       		<?php endif; ?>
+					       	<?php endif; ?>
+					       
 					    </table>
 
-					    	<?php if($xls_fields == "") : ?>
+					    	<?php if( $count_xfields == 0 ) : ?>
 					       	
 					       		<?php  
-					       			foreach ($data['modx_defaults'] as  $modx_default) {
-					       				$this_default = explode(',', $modx_default);
-					       				if($modx_field == $this_default[0]) {
-					       					switch ($this_default[1]) {
+
+					       			foreach ($data['modx_defaults'] as  $mfield => $modx_default) {
+
+					       				if($modx_field == $mfield) {
+					       					
+					       					switch ($modx_default['type']) {
 					       						case 'text':
-					       							echo '<input name="'.  $this_default[0] . '[]" type="'.  $this_default[1] .'" value="'.  $this_default[2] .'">';
+					       							echo '<input name="'.  $mfield . '[]" type="'.  $modx_default['type'] .'" value="'.  $modx_default['value'] .'">';
 					       							break;
 					       						case 'checkbox':
-					       							$checked = $this_default[2] == 1 ? 'checked' : '';
-					       							echo '<input name="'.  $this_default[0] . '[]" type="'.  $this_default[1] .'" value="true" ' . $checked .' >';
+					       							$checked = $modx_default['value'] == true ? 'checked' : '';
+					       							echo '<input name="'.  $mfield . '[]" type="'.  $modx_default['type'] .'" value="true" ' . $checked .' >';
 					       							break;
 					       						case 'date':
-					       							echo '<input name="'.  $this_default[0] . '[]" type="'.  $this_default[1] .'" value="'.  $this_default[2] .'">';
+					       							echo '<input name="'.  $mfield . '[]" type="'.  $modx_default['type'] .'" value="'.  $modx_default['value'] .'">';
 					       							break;
 					       						case 'textarea':
-					       							echo '<textarea name="'. $this_default[0] .'[]" rows="4" cols="50"></textarea>';
+					       							echo '<textarea name="'. $mfield .'[]" rows="4" cols="50"></textarea>';
+					       							break;
+					       						case 'select' :
+					       							$select_vals = explode(',', $modx_default['value']);
+					       							$select = "<select name='{$mfield}[]'>";
+					       							foreach ($select_vals as $opt) {
+					       								$select .= "<option value='{$opt}'>{$opt}</option>";
+					       							}
+					       							$select .="</select>";
+					       							echo $select;
 					       							break;
 					       					}
 					       					
@@ -102,11 +114,15 @@
 					       			}
 					       		?>
 					       	<?php endif; ?>
-				</li>
+
+
+					    </li>
+					  <?php endif; ?>
 
 			<?php endforeach; ?>
+				
 		</ul>
-		<input type="hidden"  name="file_path" value="<?php echo $data['file_path'] ?>">
+
 		<input type="submit" id="submit" class="btn btn-custom" value="Submit Mapping">
 	</form>
 	
