@@ -15,7 +15,7 @@
 			var m_field = sep_class[0];
 			// get data separator value
 			var separator = $(this).data('separator');
-			$('table.'+m_field+'-tbl').append('<tr style="cursor: move;"><td class="alert alert-info">' 
+			$('table.'+m_field+'-tbl').append('<tr style="cursor: move;"><td class="field-sort">' 
 				+ separator  
 				+ '<button type="button" class="close" data-dismiss="alert">×</button>'
 				+ '<input name="'+ m_field +'[]" type="hidden" value="'+ separator +'">' 
@@ -43,6 +43,7 @@
 
 
 			<?php 
+
 				foreach ($data['mapped_fields'] as $modx_field => $xls_fields) : 
 				$count_xfields = count($xls_fields);
 			?>
@@ -56,7 +57,7 @@
 							<?php foreach ($xls_fields as $xfield) : ?>
 									
 					        	<tr>
-					        		<td class="alert alert-info">
+					        		<td class="field-sort">
 					        			<?php echo $xfield; ?>
 					        			<input name="<?php  echo $modx_field .'[]'; ?>" type="hidden" value="<?php echo $xfield; ?>">
 					        		</td>
@@ -77,7 +78,7 @@
 					       
 					    </table>
 
-					    	<?php if( $count_xfields == 0 ) : ?>
+					    	<?php if( $modx_field != 'extended' && $count_xfields == 0 ) : ?>
 					       	
 					       		<?php  
 
@@ -122,7 +123,7 @@
 			<?php endforeach; ?>
 				
 		</ul>
-
+		<a href="<?php print $data['cmp_url']; ?>&p=process_upload"  class="btn">Back to Mapping</a>
 		<input type="submit" id="submit" class="btn btn-custom" value="Submit Mapping">
 	</form>
 	

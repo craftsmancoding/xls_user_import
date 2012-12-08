@@ -222,7 +222,13 @@ class XLS_Importer_Controller {
 		/* 		echo '<pre>';
  		print_r($_POST);
  		die();*/
+
+
 		$import_fields = json_decode($_POST['import_fields'], true);
+/*		echo '<pre>';
+ 		print_r($import_fields);
+ 		die();*/
+
 
 		$data = array();
 		$data['title'] = $modx->lexicon('xls_user_import');
@@ -245,18 +251,18 @@ class XLS_Importer_Controller {
 			$temp_password = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 6)), 0, 6);
 
 			$user->set('username', $ifield['email']);
-			$user->set('active', ($ifield['active'] == true) ? 1 : 0  );
+			$user->set('active', (isset($ifield['active'])) ? 1 : 0  );
 			$user->set('password', $temp_password);
 			$user->set('class_key', $ifield['class_key']);
 			$user->set('primary_group', $ifield['primary_group']);
-			$user->set('sudo', ($ifield['sudo'] == true) ? 1 : 0  );
+			$user->set('sudo', (isset($ifield['sudo'])) ? 1 : 0  );
 
 			$profile->set('email', $ifield['email']);
 			$profile->set('internalKey', 0);
 			$profile->set('fullname', $ifield['fullname']);
 			$profile->set('phone', $ifield['phone']);
 			$profile->set('mobilephone', $ifield['mobilephone']);
-			$profile->set('blocked', ($ifield['blocked'] == true) ? 1 : 0  );
+			$profile->set('blocked', (isset($ifield['blocked'])) ? 1 : 0  );
 			$profile->set('blockeduntil', strtotime($ifield['blockeduntil']));
 			$profile->set('blockedafter', strtotime($ifield['blockedafter']));
 			$profile->set('address', $ifield['address']);
@@ -324,12 +330,13 @@ class XLS_Importer_Controller {
 		$xls_fields = get('xls_fields', $_POST, array());
 		$modx_fields = array_keys($this->modx_fields);
 		$data['modx_defaults'] = $this->modx_fields;
-
-	/*	echo '<pre>';
-		print_r($xls_fields);*/
 		
 		$data['mapped_fields'] = array();
-		
+
+		// set $_SESSION['xlsimporter']['prevmap'] for previous mapping
+		$_SESSION['xlsimporter']['mapping'] = $xls_fields;
+
+	
 		// Get the array of xls fields that map to each MODx 
 		// First we initialize the fields...
 		foreach ($modx_fields as $mfield) {
@@ -365,18 +372,14 @@ class XLS_Importer_Controller {
 		$header_row = $xls_fields[1];
 		$posted_data = $_POST;
 		// Here are the column mappings
-		echo '<pre>';
-		print_r($_SESSION['xlsimporter']['columns']);
-
-		echo '<pre>';
-		print_r($posted_data);
-		
+/*		echo '<pre>';
+		print_r($_SESSION['xlsimporter']['columns']);*/
+	
 
 		// remove the header fields
 		unset($xls_fields[1]);
 
 		$data['mapped_data'] = array();
-
 
 		foreach ($xls_fields as $field) {
 
@@ -411,7 +414,7 @@ class XLS_Importer_Controller {
 						// construct json encoded value for extended field
 						if ($key == 'extended') {
 							// concatenate the mapped extended value and convert it to array
-							$modx_data[$key] .= isset($field[$i]) ? '||' . $field[$i]  : '||'."";
+							$modx_data[$key]  .= isset($field[$i]) ? '||' . $field[$i]  : '||'."";
 						} else {
 							$modx_data[$key] .= isset($field[$i]) ? $field[$i] : $separator;
 						}
@@ -424,17 +427,31 @@ class XLS_Importer_Controller {
 			}
 
 
+			if(isset($posted_data['extended'])) {
+				if(isset($modx_data['extended'])) {
+					// explode the $modx_data['extended'] to array
+					$ext_val = explode('||', $modx_data['extended']);			
+					
+					// combined the xtended value and key
+					$ext = array_combine($posted_data['extended'], $ext_val);
+								
+					// json encode the form extended array values
+					$ext_json = json_encode($ext);
+
+					//set $modx_data['extended'] to json
+					$modx_data['extended'] = $ext_json;
+				} else {
+					$modx_data['extended'] = '';
+				}
+
+			}
+
+
 			// construct data consisting of the mapped fields
 			array_push($data['mapped_data'], $modx_data);
 
 
 		}
-
-		
-		echo '<pre>';
-		print_r($data['mapped_data']);
-		die();
-
 
 		return load_view('preview_data.php', $data);
 	}

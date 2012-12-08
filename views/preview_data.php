@@ -75,7 +75,7 @@
 		<?php endif; ?>
 
 		<input type="submit" class="btn btn-custom" value="Import Users">
-		<a href="<?php print $data['cmp_url']; ?>&p=process_upload&file=<?php echo basename($data['file_path']); ?>"  class="btn">Back to Mapping</a>
+		<a href="<?php print $data['cmp_url']; ?>&p=process_upload"  class="btn">Back to Mapping</a>
 		</form>
 		
 		<div style='display:none'>

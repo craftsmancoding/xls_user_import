@@ -11,8 +11,9 @@
 
 
 
-		<?php 
-		// Used to generate unique CSS ids
+		<?php 		
+		// Used to generate unique CSS ids		
+
 		$i = 0;
 		foreach ($data['xls_fields'] as $xls_field) :
 		?>
