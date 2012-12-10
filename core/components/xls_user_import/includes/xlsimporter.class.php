@@ -165,6 +165,16 @@ class XLS_Importer_Controller {
 			case 'title':
 				return 'fullname';
 				break;
+			case 'E-mail':
+				return 'email';
+				break;
+			case 'zipcode':
+			case 'zip code':
+			case 'zip-code':
+			case 'postalcode':
+			case 'postal code':
+				return 'zip';
+				break;
 		}
 		
 		// give up... fall back to extended data
